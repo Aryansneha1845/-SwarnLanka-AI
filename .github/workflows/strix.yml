@@ -15,10 +15,10 @@ jobs:
           fetch-depth: 0
       - name: Install Strix
         run: curl -sSL https://strix.ai/install | bash
-      - name: Strix Cloud Quick Scan (diff-scoped)
+      - name: Strix Cloud Quick Scan
         env:
           STRIX_API_KEY: ${{ secrets.STRIX_API_KEY }}
         run: |
           export PATH="$HOME/.strix/bin:$PATH"
-          strix cloud scans start --source . --yes --wait --scan-mode quick --scope-mode diff
-          strix cloud vulns list --severity critical --fail-on-found || true
+          strix cloud scans start --source . --yes --wait
+          strix cloud vulns list --severity critical || true
