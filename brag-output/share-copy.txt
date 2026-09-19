@@ -1,0 +1,5 @@
+SwarnLanka AI: Citizen photo -> AI priority in seconds. 12 reports, 1 incident. Live: https://swarn-lanka-fxrdrw1tn-aryansneha1845.vercel.app
+
+We built SwarnLanka AI for Hack Devengers 2.0 — UploadFile + AI mock (94% conf) + haversine duplicate detection (73m grouping) + transparent P1-P4 priority. Try it: swarn-lanka-fxrdrw1tn-aryansneha1845.vercel.app/report
+
+#brag #HackDevengers #CivicTech

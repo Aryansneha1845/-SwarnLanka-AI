@@ -31,7 +31,14 @@ export default function Home(){
       </section>
 
       <section className="max-w-6xl mx-auto px-6 -mt-6">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className=" rounded-2xl overflow-hidden border bg-black shadow-lg">
+          <video poster="/brag.jpg" src="/brag.mp4" muted loop playsInline autoPlay controls className="w-full aspect-video object-cover"></video>
+          <div className="p-3 flex flex-wrap justify-between items-center text-xs text-stone-600 bg-white">
+            <span>SwarnLanka AI — 20s Launch Video (polished, Happy Beats) — brag.mp4</span>
+            <a href="/brag.mp4" download className="font-semibold text-amber-700 hover:text-amber-800">Download brag.mp4</a>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
           <div className="glass rounded-2xl p-6 card-hover">
             <div className="text-sm text-stone-500">Workflow</div>
             <div className="mt-2 font-semibold">Report -&gt; AI -&gt; Verify -&gt; Priority -&gt; Route -&gt; Resolve</div>
