@@ -42,61 +42,86 @@ export default function ReportPage(){
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold">Report Civic Issue</h1>
-        <p className="text-stone-600 mt-2">UploadFile + AI Analysis + Priority Routing</p>
+    <div className="max-w-5xl mx-auto px-8 py-12">
+      <div>
+        <h1 className="text-4xl font-bold tracking-tight">Report</h1>
+        <p className="text-stone-600 mt-2 text-lg">Photo, description and location. AI does the rest.</p>
       </div>
 
-      <div className="mt-8 bg-white rounded-2xl border shadow-sm p-6">
-        <label className="text-sm font-semibold">Upload Image</label>
-        <label className="mt-2 flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 cursor-pointer hover:bg-amber-50/50 transition">
-          <input type="file" accept="image/*" onChange={onFileChange} className="hidden" />
-          {preview ? <img src={preview} alt="preview" className="max-h-56 rounded-xl object-cover"/> :
-            <div className="text-center"><div className="w-12 h-12 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center mx-auto">+</div><div className="text-sm font-medium mt-2">Click to upload photo</div><div className="text-xs text-stone-500">JPG, PNG up to 5MB</div></div>
-          }
-        </label>
+      <div className="mt-10 grid lg:grid-cols-5 gap-8">
+        <div className="lg:col-span-3 space-y-6">
+          <div className="bg-white rounded-3xl border p-8">
+            <div className="text-sm font-semibold">Photo</div>
+            <p className="text-xs text-stone-500 mt-1">UploadFile — actual file, not URL</p>
+            <label className="mt-4 flex flex-col items-center justify-center border-2 border-dashed rounded-3xl p-10 cursor-pointer hover:bg-amber-50/50 transition min-h-[280px]">
+              <input type="file" accept="image/*" onChange={onFileChange} className="hidden" />
+              {preview ? <img src={preview} alt="preview" className="max-h-64 rounded-2xl object-cover w-full"/> :
+                <div className="text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto text-2xl">+</div>
+                  <div className="font-medium mt-3">Drop photo here</div>
+                  <div className="text-sm text-stone-500">or click to browse</div>
+                </div>
+              }
+            </label>
+          </div>
 
-        <div className="mt-6">
-          <label className="text-sm font-semibold">Description</label>
-          <textarea value={description} onChange={(e)=>setDescription(e.target.value)} placeholder="Huge pothole near college gate, garbage overflow..." className="mt-2 w-full min-h-[100px] p-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-amber-300" />
+          <div className="bg-white rounded-3xl border p-8">
+            <div className="text-sm font-semibold">Tell us what you see</div>
+            <textarea value={description} onChange={(e)=>setDescription(e.target.value)} placeholder="Huge pothole near college gate, water is leaking..." className="mt-4 w-full min-h-[140px] p-4 rounded-2xl border text-base focus:outline-none focus:ring-2 focus:ring-amber-300" />
+            <div className="mt-6 grid grid-cols-2 gap-4">
+              <input value={latitude} onChange={(e)=>setLatitude(e.target.value)} placeholder="Latitude" className="p-4 rounded-2xl border focus:outline-none focus:ring-2 focus:ring-amber-300" />
+              <input value={longitude} onChange={(e)=>setLongitude(e.target.value)} placeholder="Longitude" className="p-4 rounded-2xl border focus:outline-none focus:ring-2 focus:ring-amber-300" />
+            </div>
+            <button onClick={useLocation} className="mt-4 w-full py-3 rounded-2xl border-2 font-semibold hover:bg-stone-50">Use Current Location</button>
+            <button onClick={handleAnalyze} disabled={loading||!description} className="mt-6 w-full py-4 rounded-2xl bg-stone-900 text-white text-lg font-semibold hover:bg-black disabled:opacity-50 transition">
+              {loading ? "Analyzing..." : "Analyze with AI →"}
+            </button>
+            {error && <p className="text-red-600 text-sm mt-4 bg-red-50 border border-red-200 rounded-xl p-3">{error}</p>}
+          </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-3">
-          <input value={latitude} onChange={(e)=>setLatitude(e.target.value)} placeholder="Latitude" className="p-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-amber-300" />
-          <input value={longitude} onChange={(e)=>setLongitude(e.target.value)} placeholder="Longitude" className="p-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-amber-300" />
+        <div className="lg:col-span-2">
+          <div className="sticky top-24 space-y-6">
+            {!ai && !submitted && (
+              <div className="bg-amber-50 rounded-3xl border border-amber-200 p-8">
+                <div className="w-12 h-12 rounded-2xl bg-white border flex items-center justify-center">◐</div>
+                <h3 className="font-bold mt-4">AI preview will appear here</h3>
+                <p className="text-sm text-stone-600 mt-2 leading-relaxed">We show category, severity, department and priority before you submit. No surprises.</p>
+              </div>
+            )}
+            {ai && (
+              <div className="bg-white rounded-3xl border shadow-sm p-8">
+                <div className="flex justify-between items-start">
+                  <h3 className="font-bold">AI Analysis</h3>
+                  <span className="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full font-bold">{(ai.confidence*100).toFixed(0)}%</span>
+                </div>
+                <div className="mt-6 grid grid-cols-2 gap-4">
+                  <div><div className="text-xs uppercase tracking-widest text-stone-500">Category</div><div className="font-bold mt-1 capitalize text-lg">{ai.category}</div></div>
+                  <div><div className="text-xs uppercase tracking-widest text-stone-500">Severity</div><div className="font-bold mt-1 text-lg">{ai.severity} / 4</div></div>
+                </div>
+                <div className="mt-6 bg-stone-900 text-white rounded-3xl p-6">
+                  <div className="text-xs uppercase tracking-widest opacity-60">Priority</div>
+                  <div className="flex justify-between items-end mt-2">
+                    <div className="text-4xl font-bold">{ai.priority_score}</div>
+                    <div className="text-right"><div className="font-bold">{ai.priority_level}</div><div className="text-xs opacity-60">{ai.department}</div></div>
+                  </div>
+                </div>
+                <p className="text-sm text-stone-600 mt-4 leading-relaxed">{ai.summary}</p>
+                <button onClick={handleSubmit} disabled={loading} className="mt-6 w-full py-4 rounded-2xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 transition">Submit Report</button>
+              </div>
+            )}
+            {submitted && (
+              <div className="bg-emerald-600 text-white rounded-3xl p-8 text-center">
+                <div className="w-16 h-16 rounded-full bg-white text-emerald-600 flex items-center justify-center mx-auto text-2xl">✓</div>
+                <h3 className="font-bold text-xl mt-4">Submitted #{submitted.id}</h3>
+                <p className="text-emerald-100 mt-2">{submitted.priority_level} • {submitted.priority_score} • Group #{submitted.duplicate_group_id}</p>
+                <p className="text-sm text-emerald-100 mt-1">{submitted.department}</p>
+                <a href="/dashboard" className="inline-block mt-6 px-6 py-3 rounded-full bg-white text-emerald-700 font-bold">View Dashboard →</a>
+              </div>
+            )}
+          </div>
         </div>
-        <button onClick={useLocation} className="mt-3 w-full py-2.5 rounded-xl border font-medium hover:bg-stone-50">Use Current Location</button>
-
-        <button onClick={handleAnalyze} disabled={loading||!description} className="mt-4 w-full py-3 rounded-xl bg-stone-900 text-white font-semibold hover:bg-black disabled:opacity-50 transition">{loading?"Analyzing...":"Analyze with AI"}</button>
-        {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
       </div>
-
-      {ai && (
-        <div className="mt-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-6">
-          <h3 className="font-bold flex items-center gap-2">AI ANALYSIS <span className="text-xs bg-white border px-2 py-1 rounded-full">{(ai.confidence*100).toFixed(0)}% confidence</span></h3>
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <div className="bg-white rounded-xl p-3 border"><div className="text-xs text-stone-500">Category</div><div className="font-semibold capitalize">{ai.category}</div></div>
-            <div className="bg-white rounded-xl p-3 border"><div className="text-xs text-stone-500">Severity</div><div className="font-semibold">{ai.severity} / 4</div></div>
-            <div className="bg-white rounded-xl p-3 border"><div className="text-xs text-stone-500">Safety Risk</div><div className="font-semibold capitalize">{ai.safety_risk}</div></div>
-            <div className="bg-white rounded-xl p-3 border"><div className="text-xs text-stone-500">Department</div><div className="font-semibold text-amber-800">{ai.department}</div></div>
-          </div>
-          <div className="mt-3 bg-stone-900 text-white rounded-xl p-4 flex justify-between items-center">
-            <div><div className="text-xs text-stone-400">Priority Score</div><div className="text-2xl font-bold">{ai.priority_score}</div></div>
-            <div className="text-right"><div className="text-xs text-stone-400">Level</div><div className="font-bold">{ai.priority_level}</div></div>
-          </div>
-          <p className="text-sm text-stone-600 mt-3">{ai.summary}</p>
-          <button onClick={handleSubmit} disabled={loading} className="mt-4 w-full py-3 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition">Submit Report</button>
-        </div>
-      )}
-
-      {submitted && (
-        <div className="mt-6 bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-center">
-          <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center mx-auto">✓</div>
-          <h3 className="font-bold mt-2">Submitted ID #{submitted.id}</h3>
-          <p className="text-sm text-stone-600">{submitted.priority_level} ({submitted.priority_score}) | Group #{submitted.duplicate_group_id} | {submitted.department}</p>
-        </div>
-      )}
     </div>
   );
 }
