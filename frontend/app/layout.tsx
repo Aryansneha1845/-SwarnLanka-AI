@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
@@ -27,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <div className="flex items-center gap-2">
               <Link href="/report" className="px-4 py-2 rounded-full bg-stone-900 text-white text-sm font-medium hover:bg-black transition">Report Issue</Link>
               <Link href="/dashboard" className="px-4 py-2 rounded-full border text-sm font-medium hover:bg-white transition">Dashboard</Link>
-              <Link href="/report" className="hidden sm:block px-3 py-2 text-sm text-stone-600 hover:text-black">Map</Link>
+              <Link href="/map" className="hidden sm:block px-3 py-2 text-sm text-stone-600 hover:text-black">Map</Link>
             </div>
           </div>
         </nav>
