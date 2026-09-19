@@ -9,7 +9,7 @@
 
 SwarnLanka AI is an **AI-powered civic intelligence platform** that transforms unstructured citizen complaints (photo + text + location) into **verified, prioritized and actionable civic incidents** with automated department routing and duplicate grouping.
 
-**Live Demo:** _Add Vercel URL after deployment_ | **GitHub:** https://github.com/Aryansneha1845/-SwarnLanka-AI | **API Docs:** http://127.0.0.1:8000/docs
+**Live Demo:** https://swarn-lanka-fxrdrw1tn-aryansneha1845.vercel.app | **Backend:** https://swarnlanka-ai.onrender.com | **GitHub:** https://github.com/Aryansneha1845/-SwarnLanka-AI | **API Docs:** https://swarnlanka-ai.onrender.com/docs
 
 ---
 
@@ -147,9 +147,9 @@ Invoke-RestMethod -Uri http://127.0.0.1:8000/api/ai/analyze -Method Post -Conten
 
 ## Deployment
 
-- **Frontend:** Vercel -> `NEXT_PUBLIC_API_URL=https://your-backend.onrender.com`
-- **Backend:** Render/Railway -> `CORS_ORIGINS=https://your-frontend.vercel.app`
-- After deploy, update this README Live Demo link + use it in Google Form.
+- **Frontend:** Vercel -> https://swarn-lanka-fxrdrw1tn-aryansneha1845.vercel.app (`NEXT_PUBLIC_API_URL=https://swarnlanka-ai.onrender.com`)
+- **Backend:** Render -> https://swarnlanka-ai.onrender.com (`CORS_ORIGINS=*` for demo)
+- Live demo verified 19 Sep 2026: Frontend 200 OK, Backend `{"status":"online"}`, `POST /api/ai/analyze` -> `road_damage 71 P2`
 
 ---
 
