@@ -23,6 +23,8 @@ def root():
 def health():
     return {'status': 'healthy'}
 
-# Routers will be included here
-# from app.routes import reports, ai, dashboard
-# app.include_router(reports.router, prefix='/api/reports')
+from app.routes import reports, ai, dashboard
+
+app.include_router(reports.router, prefix="/api/reports", tags=["reports"])
+app.include_router(ai.router, prefix="/api/ai", tags=["ai"])
+app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
